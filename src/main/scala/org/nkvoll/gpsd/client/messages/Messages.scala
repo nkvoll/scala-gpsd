@@ -44,10 +44,20 @@ object Messages {
   def maybeText(jsonNode: JsonNode) = if(jsonNode.isMissingNode) None else Some(jsonNode.asText())
   def maybeDouble(jsonNode: JsonNode) = if(jsonNode.isMissingNode) None else Some(jsonNode.asDouble())
   def maybeInt(jsonNode: JsonNode) = if(jsonNode.isMissingNode) None else Some(jsonNode.asInt())
-  def maybeTime(jsonNode: JsonNode): Option[Date] = if(jsonNode.isMissingNode) None else Some(dateFormat.parseDateTime(jsonNode.asText()).toDate)
+  def maybeTime(jsonNode: JsonNode): Option[Date] = if(jsonNode.isMissingNode) None else Some(parseDateTime(jsonNode.asText()))
+
+  def parseDateTime(str: String) = {
+    try {
+      dateFormat.parseDateTime(str).toDate
+    } catch {
+      case e: IllegalArgumentException => {
+        new java.util.Date((java.lang.Double.parseDouble(str) * 1000).asInstanceOf[Long])
+      }
+    }
+  }
 
   def parseDevice(objectNode: ObjectNode): Device = {
-    val activatedDate = dateFormat.parseDateTime(objectNode.path("activated").asText()).toDate
+    val activatedDate = parseDateTime(objectNode.path("activated").asText())
 
     val maybePath = maybeText(objectNode.path("path"))
     val maybeFlag = maybeInt(objectNode.path("flag"))
@@ -69,7 +79,7 @@ object Messages {
     val it = objectNode.path("devices").iterator()
     while(it.hasNext) devices ::= parseDevice(it.next().asInstanceOf[ObjectNode])
 
-    Devices(devices: _*)
+    Devices(devices)
   }
 
   def parseTPV(objectNode: ObjectNode): TPV = {
@@ -107,13 +117,13 @@ object Messages {
   }
 
   def parseSatellite(objectNode: ObjectNode): Satellite = {
-    Satellite(objectNode.path("prn").asInt(), objectNode.path("el").asInt(), objectNode.path("az").asInt(), objectNode.path("ss").asInt(), objectNode.path("used").asBoolean())
+    Satellite(objectNode.path("PRN").asInt(), objectNode.path("el").asInt(), objectNode.path("az").asInt(), objectNode.path("ss").asInt(), objectNode.path("used").asBoolean())
   }
 
   def parseSky(objectNode: ObjectNode): Sky = {
     var satellites = List[Satellite]()
 
-    val it = objectNode.path("devices").iterator()
+    val it = objectNode.path("satellites").iterator()
     while(it.hasNext) satellites ::= parseSatellite(it.next().asInstanceOf[ObjectNode])
 
     val maybeTag = maybeText(objectNode.path("tag"))
@@ -128,13 +138,13 @@ object Messages {
     val maybePdop = maybeDouble(objectNode.path("pdop"))
     val maybeGdop = maybeDouble(objectNode.path("gdop"))
 
-    Sky(maybeTag, maybeDevice, maybeTime_, maybeXdop, maybeYdop, maybeVdop, maybeTdop, maybeHdop, maybePdop, maybeGdop, satellites: _*)
+    Sky(maybeTag, maybeDevice, maybeTime_, maybeXdop, maybeYdop, maybeVdop, maybeTdop, maybeHdop, maybePdop, maybeGdop, satellites)
   }
 
   def parseVersion(objectNode: ObjectNode): Version = {
     val maybeRemote = maybeText(objectNode.path("remote"))
 
-    Version(objectNode.path("class").asText, objectNode.path("release").asText, objectNode.path("rev").asText(), objectNode.path("proto_major").asInt, objectNode.path("proto_minor").asInt, maybeRemote)
+    Version(objectNode.path("release").asText, objectNode.path("rev").asText(), objectNode.path("proto_major").asInt, objectNode.path("proto_minor").asInt, maybeRemote)
   }
 
   def parseWatch(objectNode: ObjectNode): messages.Watch = {

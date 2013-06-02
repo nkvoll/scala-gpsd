@@ -16,7 +16,7 @@ package object messages {
     remote	No	string	URL of the remote daemon reporting this version. If empty, this is the version of the local daemon.
 
    */
-  case class Version(`class`: String, release: String, rev: String, protoMajor: Int, protoMinor: Int, remote: Option[String]) extends GPSMessage
+  case class Version(release: String, rev: String, protoMajor: Int, protoMinor: Int, remote: Option[String]) extends GPSMessage
 
   /**
    *
@@ -59,7 +59,7 @@ package object messages {
    */
   case class Device(path: Option[String], activated: Date, flag: Option[Int], driver: Option[String], subtype: Option[String], bps: Option[Int], parity: String, stopBits: Int, native: Option[Int], cycle: Option[Double], mincycle: Option[Double]) extends GPSMessage
 
-  case class Devices(devices: Device*) extends GPSMessage
+  case class Devices(devices: Seq[Device]) extends GPSMessage
 
   /**
    * Name	Always?	Type	Description
@@ -87,7 +87,7 @@ package object messages {
     gdop	No	numeric	Hyperspherical dilution of precision, a dimensionless factor which should be multiplied by a base UERE to get an error estimate.
     satellites	Yes	list	List of satellite objects in skyview
    */
-  case class Sky(tag: Option[String], device: Option[String], time: Option[Date], xdop: Option[Double], ydop: Option[Double], vdop: Option[Double], tdop: Option[Double], hdop: Option[Double], pdop: Option[Double], gdop: Option[Double], satellites: Satellite*) extends GPSMessage
+  case class Sky(tag: Option[String], device: Option[String], time: Option[Date], xdop: Option[Double], ydop: Option[Double], vdop: Option[Double], tdop: Option[Double], hdop: Option[Double], pdop: Option[Double], gdop: Option[Double], satellites: Seq[Satellite]) extends GPSMessage
 
 
   /**

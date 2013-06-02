@@ -22,7 +22,9 @@ object Build extends Build {
     libraryDependencies += "joda-time" % "joda-time" % "2.2",
     libraryDependencies += "org.joda" % "joda-convert" % "1.3.1",
 
-    libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.5"
+    libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.5",
+
+    libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test"
   )
 
   lazy val akka = Project("akka", file("akka")).dependsOn(root).settings(defaultBuildSettings: _*).settings(
