@@ -1,4 +1,4 @@
-package org.nkvoll.gpsd.client
+package org.nkvoll.gpsd.client.akka
 
 import util.Random
 

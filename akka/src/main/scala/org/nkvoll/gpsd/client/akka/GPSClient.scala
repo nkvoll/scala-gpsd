@@ -1,15 +1,15 @@
-package org.nkvoll.gpsd.client
+package org.nkvoll.gpsd.client.akka
 
 import akka.actor.{ActorRef, Actor}
 import akka.io.{IO, Tcp}
 import java.net.InetSocketAddress
 import org.slf4j.LoggerFactory
-import akka.io.Tcp.{Connect, CommandFailed}
+import akka.io.Tcp.CommandFailed
 import akka.util.ByteString
 import org.nkvoll.gpsd.client.messages.Messages
-import org.nkvoll.gpsd.client.commands.GPSCommands
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
+import org.nkvoll.gpsd.client.commands.GPSCommand
 
 class GPSClient(host: String, port: Int, listener: ActorRef, retryTimer: RetryTimer = RetryTimer.getDefaultRetryTimer) extends Actor {
   val logger = LoggerFactory.getLogger(getClass)
@@ -32,7 +32,7 @@ class GPSClient(host: String, port: Int, listener: ActorRef, retryTimer: RetryTi
 
       retryTimer.resetDelay()
 
-      var buffer = ByteString()
+      var buffer = Array[Byte]()
       val connection = sender
 
       sender ! Tcp.Register(self)
@@ -54,8 +54,8 @@ class GPSClient(host: String, port: Int, listener: ActorRef, retryTimer: RetryTi
         case closeCommand: Tcp.CloseCommand => {
           connection ! closeCommand
         }
-        case command: GPSCommands => {
-          connection ! Tcp.Write(command.serialize())
+        case command: GPSCommand => {
+          connection ! Tcp.Write(ByteString(command.serialize()))
         }
         case cf: CommandFailed => listener ! cf
         case a => {

@@ -1,10 +1,10 @@
-package org.nkvoll.gpsd
+package org.nkvoll.gpsd.example
 
 import akka.actor.{ActorRef, Actor}
 import akka.util.ByteString
 import org.slf4j.LoggerFactory
 import org.nkvoll.gpsd.client.{commands, messages}
-import org.nkvoll.gpsd.location.Location
+import org.nkvoll.gpsd.example.location.Location
 
 
 class GpsUser(locationActor: ActorRef) extends Actor {
