@@ -5,9 +5,9 @@ including an [Akka](http://akka.io/) actor which acts as a client to the `gpsd` 
 
 The three projects in this repository are:
 
- - The `gpsd` client [library code](src/main/scala/org/nkvoll/gpsd/client/messages)
+ - The `gpsd` client [library code](src/main/scala/org/nkvoll/gpsd/client)
  - An Akka actor [GPSClient](akka/src/main/scala/org/nkvoll/gpsd/client/akka/GPSClient.scala)
- - An [example application](example/src/main/scala/org/nkvoll/gpsd/client/example/Bootstrap.scala) that uses the `GPSClient` actor.
+ - An [example application](example/src/main/scala/org/nkvoll/gpsd/example/Bootstrap.scala) that uses the `GPSClient` actor.
 
 Note: Not all `gpsd`-types are parsed by the actor, but the most commonly used are:
 
@@ -42,5 +42,5 @@ MIT-licensed. See [LICENSE.txt](LICENSE.txt) for details.
 
 ## Links
 
-Akka: [http://akka.io/](http://akka.io/)
-GPSD: [http://gpsd.berlios.de/](http://gpsd.berlios.de/)
+ - Akka: [http://akka.io/](http://akka.io/)
+ - GPSD: [http://gpsd.berlios.de/](http://gpsd.berlios.de/)
