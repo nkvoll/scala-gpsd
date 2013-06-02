@@ -6,12 +6,12 @@ import java.net.InetSocketAddress
 import org.slf4j.{LoggerFactory, Logger}
 import akka.util.ByteString
 
-class Client(host: String, port: Int, listener: ActorRef, manager: ActorRef) extends Actor {
+class Client(host: String, port: Int, listener: ActorRef) extends Actor {
   val logger = LoggerFactory.getLogger(getClass)
 
   import context.system
 
-  logger.info(s"Connecting to $host:$port using $manager")
+  logger.info(s"Connecting to $host:$port.")
 
   IO(Tcp) ! Tcp.Connect(new InetSocketAddress(host, port))
 
@@ -39,11 +39,9 @@ class Client(host: String, port: Int, listener: ActorRef, manager: ActorRef) ext
 
   def connectedReceive: Receive = {
     case Tcp.Received(data) => {
-      logger.debug(s"Client $this received: ${data.utf8String}")
       listener ! data
     }
     case data: ByteString => {
-      logger.info(s"Writing data: $data")
       connection ! Tcp.Write(data)
     }
     case a => {
