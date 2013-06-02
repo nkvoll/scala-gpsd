@@ -82,7 +82,8 @@ class MessagesSpec extends FunSpec with ShouldMatchers with Inside {
     it("should be able to parse DEVICES messages") {
       val data = """{"class":"DEVICES","devices":[{"class":"DEVICE","path":"/dev/ttyUSB0","activated":1269959537.20,"native":0,"bps":4800,"parity":"N","stopbits":1,"cycle":1.00}]}""".getBytes
 
-      val cal = new GregorianCalendar(2010, 2, 30, 16, 32, 17)
+      val cal = new GregorianCalendar(2010, 2, 30, 14, 32, 17)
+      cal.setTimeZone(java.util.TimeZone.getTimeZone("UTC"))
       cal.set(Calendar.MILLISECOND, 200)
 
       inside(Messages.parseMessage(data)) { case Some(Devices(devices)) => {
@@ -107,7 +108,8 @@ class MessagesSpec extends FunSpec with ShouldMatchers with Inside {
                    |                 "driver":"SiRF binary","native":1,"bps":4800,
                    |                 "parity":"N","stopbits":1,"cycle":1.00}""".stripMargin.getBytes
 
-      val cal = new GregorianCalendar(2010, 2, 30, 16, 53, 13)
+      val cal = new GregorianCalendar(2010, 2, 30, 14, 53, 13)
+      cal.setTimeZone(java.util.TimeZone.getTimeZone("UTC"))
       cal.set(Calendar.MILLISECOND, 970)
 
       inside(Messages.parseMessage(data)) { case Some(Device(pathOpt, activated, flagOpt, driverOpt, subtypeOpt, bpsOpt, parity, stopBits, nativeOpt, cycleOpt, mincycleOpt)) => {
@@ -168,7 +170,8 @@ class MessagesSpec extends FunSpec with ShouldMatchers with Inside {
                    |    "mode":2
                    |  }""".stripMargin.getBytes
 
-      val cal = new GregorianCalendar(2009, 8, 22, 6, 18, 5)
+      val cal = new GregorianCalendar(2009, 8, 22, 4, 18, 5)
+      cal.setTimeZone(java.util.TimeZone.getTimeZone("UTC"))
       cal.set(Calendar.MILLISECOND, 470)
 
       inside(Messages.parseMessage(data)) { case Some(TPV(mode, tagOpt, deviceOpt, timeOpt, eptOpt, latOpt, lonOpt, altOpt, epxOpt, epyOpt, epvOpt, trackOpt, speedOpt, climbOpt, epdOpd, epsOpt, epcOpt)) => {

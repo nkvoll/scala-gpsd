@@ -1,5 +1,7 @@
 # Scala (and Akka) library to interface with GPSD
 
+[![Build Status](https://travis-ci.org/nkvoll/scala-gpsd.png)](https://travis-ci.org/nkvoll/scala-gpsd)
+
 This repository contains some sample code to interface with [gpsd](http://gpsd.berlios.de/),
 including an [Akka](http://akka.io/) actor which acts as a client to the `gpsd` service.
 
